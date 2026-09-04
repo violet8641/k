@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimate Maker & Persistent Inventory</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #2563eb;
+            --light-bg: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 20px;
+            color: #334155;
+        }
+
+        /* Full Width Web Application Display */
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            font-weight: bold;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Shop Header */
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .shop-info h1 { margin: 0 0 5px 0; color: var(--primary); font-size: 24px; }
+        .shop-info p { margin: 2px 0; font-size: 13px; color: #64748b; }
+        .estimate-title h2 { margin: 0; font-size: 28px; color: var(--accent); }
+
+        /* Customer Details Form */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-weight: bold; font-size: 12px; text-transform: uppercase; }
+        .form-group input { padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+
+        /* Search Dropdown Section */
+        .search-select-section {
+            margin-bottom: 20px;
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed #bfdbfe;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .search-select-section label { font-weight: bold; font-size: 13px; color: var(--accent); white-space: nowrap; }
+        .search-select-section input { flex-grow: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--primary); color: white; font-size: 13px; }
+        td input { width: 90%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; }
+        .table-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+        .item-cell { display: flex; align-items: center; gap: 10px; }
+
+        /* Inventory Manager Form */
+        .inv-form {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr 2fr;
+            gap: 10px;
+        }
+        .inv-form-full { grid-column: span 4; display: flex; justify-content: flex-end; gap: 10px; align-items: center; }
+        .img-preview { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+
+        /* Actions & Buttons */
+        .actions { display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; }
+        .btn { padding: 8px 16px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-add { background: #10b981; color: white; }
+        .btn-print { background: var(--accent); color: white; }
+        .btn-edit { background: #f59e0b; color: white; }
+        .btn-delete { background: #ef4444; color: white; }
+        .btn-cancel { background: #64748b; color: white; }
+
+        /* ----------------------------------------------------
+           TELEGRAM/MOBILE VIEW PDF EXPORT SETTINGS
+        ---------------------------------------------------- */
+        @page {
+            size: 105mm 160mm; /* Sized for standard mobile device screen proportions */
+            margin: 0;
+        }
+
+        @media print {
+            body { 
+                background: #ffffff !important; 
+                padding: 0 !important; 
+                margin: 0 !important;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+                color: #1e293b !important;
+            }
+            .container { 
+                box-shadow: none !important; 
+                padding: 12px !important; 
+                width: 100% !important; 
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .nav-tabs, .search-select-section, .no-print, .btn-delete { 
+                display: none !important; 
+            }
+            .shop-header {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                border-bottom: 2px solid #2563eb !important;
+                padding-bottom: 8px !important;
+                margin-bottom: 10px !important;
+            }
+            .shop-info h1 { font-size: 16px !important; color: #1e293b !important; margin: 0 0 2px 0 !important; }
+            .shop-info p { font-size: 10px !important; color: #64748b !important; margin: 1px 0 !important; }
+            .estimate-title { margin-top: 6px !important; }
+            .estimate-title h2 { font-size: 15px !important; color: #2563eb !important; margin: 0 !important; }
+            
+            .details-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 6px !important;
+                padding: 8px !important;
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 6px !important;
+                margin-bottom: 10px !important;
+            }
+            .form-group label { font-size: 9px !important; color: #64748b !important; }
+            .form-group input { font-size: 11px !important; font-weight: bold !important; padding: 0 !important; }
+
+            table { width: 100% !important; margin-bottom: 0 !important; }
+            th { 
+                background: #1e293b !important; 
+                color: #ffffff !important; 
+                font-size: 10px !important; 
+                padding: 6px 4px !important; 
+            }
+            td { 
+                border-bottom: 1px solid #e2e8f0 !important; 
+                font-size: 11px !important; 
+                padding: 6px 4px !important; 
+            }
+            input { 
+                border: none !important; 
+                background: transparent !important; 
+                padding: 0 !important; 
+                font-size: 11px !important;
+                color: #1e293b !important;
+            }
+            .table-thumb {
+                width: 26px !important;
+                height: 26px !important;
+                border-radius: 4px !important;
+            }
+            .item-cell { gap: 6px !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Top Navigation Tabs -->
+    <div class="nav-tabs no-print">
+        <button class="tab-btn active" onclick="switchTab('estimateTab', this)">Estimate Generator</button>
+        <button class="tab-btn" onclick="switchTab('inventoryTab', this)">Inventory Manager</button>
+    </div>
+
+    <!-- TAB 1: ESTIMATE GENERATOR -->
+    <div id="estimateTab" class="tab-content active">
+        <div class="shop-header">
+            <div class="shop-info">
+                <h1>SmarTech Solutions</h1>
+                <p>Electrical, Plumbing, CCTV, Solar & Automation</p>
+                <p>Trippanachi | Ph: +91 8590 48 48 48</p>
+            </div>
+            <div class="estimate-title">
+                <h2>ESTIMATE</h2>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="form-group">
+                <label for="custName">Customer Name</label>
+                <input type="text" id="custName" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label for="estDate">Date</label>
+                <input type="date" id="estDate">
+            </div>
+            <div class="form-group">
+                <label for="custPhone">Phone Number</label>
+                <input type="text" id="custPhone" placeholder="+91 00000 00000">
+            </div>
+            <div class="form-group">
+                <label for="estNo">Estimate No.</label>
+                <input type="text" id="estNo" value="EST-1001">
+            </div>
+        </div>
+
+        <!-- Dropdown Search Bar -->
+        <div class="search-select-section no-print">
+            <label for="itemSearchInput">🔍 Search & Add Item:</label>
+            <input type="text" id="itemSearchInput" list="inventoryDatalist" placeholder="Type item name to add..." onchange="handleDropdownSelect(this)">
+            <datalist id="inventoryDatalist"></datalist>
+            <button class="btn btn-add" onclick="addNewRow()">+ Add Blank Line</button>
+        </div>
+
+        <!-- Estimate Table -->
+        <table id="estimateTable">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">#</th>
+                    <th style="width: 47%;">ITEM DESCRIPTION</th>
+                    <th style="width: 15%;">QTY</th>
+                    <th style="width: 20%;">BRAND</th>
+                    <th class="no-print" style="width: 10%;">ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <div class="actions">
+            <button class="btn btn-print no-print" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+    </div>
+
+    <!-- TAB 2: INVENTORY MANAGER -->
+    <div id="inventoryTab" class="tab-content">
+        <h2>Inventory Management</h2>
+        
+        <div class="inv-form">
+            <input type="hidden" id="invEditId">
+            <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" id="invName" placeholder="Product Name">
+            </div>
+            <div class="form-group">
+                <label>Default Qty</label>
+                <input type="number" id="invQty" value="1" min="1">
+            </div>
+            <div class="form-group">
+                <label>Brand</label>
+                <input type="text" id="invBrand" placeholder="Brand Name">
+            </div>
+            <div class="form-group">
+                <label>Upload Item Image</label>
+                <input type="file" id="invImageInput" accept="image/*" onchange="previewLocalImage(event)">
+            </div>
+            <div class="inv-form-full">
+                <img id="imagePreview" class="img-preview" src="" style="display:none;">
+                <button class="btn btn-cancel" id="btnCancelEdit" onclick="resetInvForm()" style="display:none;">Cancel Edit</button>
+                <button class="btn btn-add" id="btnSaveInv" onclick="saveInventoryItem()">Save Item to Inventory</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Item Name</th>
+                    <th>Default Qty</th>
+                    <th>Brand</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const defaultPlaceholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' fill='%233b82f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Item</text></svg>";
+
+    const defaultInventorySeed = [
+        { id: 1, name: "20mm Conduit Pipe LMS", qty: 10, brand: "Polycab / Astral", img: defaultPlaceholder },
+        { id: 2, name: "3x3 Co Box with Adapter", qty: 5, brand: "Cawin", img: defaultPlaceholder },
+        { id: 3, name: "4.5'' Cutting Wheel", qty: 2, brand: "Awant", img: defaultPlaceholder },
+        { id: 4, name: "Insulation Tape Roll", qty: 6, brand: "E Fab", img: defaultPlaceholder }
+    ];
+
+    let inventory = JSON.parse(localStorage.getItem('app_inventory')) || defaultInventorySeed;
+    let currentBase64Image = defaultPlaceholder;
+
+    document.getElementById('estDate').valueAsDate = new Date();
+
+    function saveToLocalStorage() {
+        localStorage.setItem('app_inventory', JSON.stringify(inventory));
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    function previewLocalImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentBase64Image = e.target.result;
+                const imgPreview = document.getElementById('imagePreview');
+                imgPreview.src = currentBase64Image;
+                imgPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function renderDatalist() {
+        const datalist = document.getElementById('inventoryDatalist');
+        datalist.innerHTML = '';
+        inventory.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            datalist.appendChild(option);
+        });
+    }
+
+    function handleDropdownSelect(input) {
+        const val = input.value;
+        const selectedItem = inventory.find(item => item.name.toLowerCase() === val.toLowerCase());
+        if (selectedItem) {
+            addRow(selectedItem.name, selectedItem.qty, selectedItem.brand, selectedItem.img);
+            input.value = '';
+        }
+    }
+
+    function handleInlineSelect(input) {
+        const val = input.value;
+        const selectedItem = inventory.find(item => item.name.toLowerCase() === val.toLowerCase());
+        if (selectedItem) {
+            const row = input.closest('tr');
+            row.querySelector('.table-thumb').src = selectedItem.img;
+            row.querySelector('.item-qty').value = selectedItem.qty;
+            row.querySelector('.item-brand').value = selectedItem.brand || '';
+        }
+    }
+
+    function renderInventoryTable() {
+        const tbody = document.getElementById('inventoryTableBody');
+        tbody.innerHTML = '';
+        inventory.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><img src="${item.img}" class="table-thumb"></td>
+                <td><strong>${item.name}</strong></td>
+                <td>${item.qty}</td>
+                <td>${item.brand || ''}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editInventoryItem(${item.id})">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteInventoryItem(${item.id})">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function saveInventoryItem() {
+        const id = document.getElementById('invEditId').value;
+        const name = document.getElementById('invName').value.trim();
+        const qty = parseInt(document.getElementById('invQty').value) || 1;
+        const brand = document.getElementById('invBrand').value.trim();
+
+        if (!name) {
+            alert('Please enter an item name.');
+            return;
+        }
+
+        if (id) {
+            const item = inventory.find(i => i.id == id);
+            item.name = name;
+            item.qty = qty;
+            item.brand = brand;
+            if (currentBase64Image !== defaultPlaceholder) item.img = currentBase64Image;
+        } else {
+            inventory.push({ id: Date.now(), name, qty, brand, img: currentBase64Image });
+        }
+
+        saveToLocalStorage();
+        resetInvForm();
+        refreshInventoryViews();
+    }
+
+    function editInventoryItem(id) {
+        const item = inventory.find(i => i.id === id);
+        if (!item) return;
+
+        document.getElementById('invEditId').value = item.id;
+        document.getElementById('invName').value = item.name;
+        document.getElementById('invQty').value = item.qty;
+        document.getElementById('invBrand').value = item.brand || '';
+        currentBase64Image = item.img;
+        
+        const imgPreview = document.getElementById('imagePreview');
+        imgPreview.src = item.img;
+        imgPreview.style.display = 'block';
+
+        document.getElementById('btnSaveInv').textContent = 'Update Item';
+        document.getElementById('btnCancelEdit').style.display = 'inline-block';
+    }
+
+    function deleteInventoryItem(id) {
+        inventory = inventory.filter(i => i.id !== id);
+        saveToLocalStorage();
+        refreshInventoryViews();
+    }
+
+    function resetInvForm() {
+        document.getElementById('invEditId').value = '';
+        document.getElementById('invName').value = '';
+        document.getElementById('invQty').value = '1';
+        document.getElementById('invBrand').value = '';
+        document.getElementById('invImageInput').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('btnSaveInv').textContent = 'Save Item to Inventory';
+        document.getElementById('btnCancelEdit').style.display = 'none';
+        currentBase64Image = defaultPlaceholder;
+    }
+
+    function refreshInventoryViews() {
+        renderDatalist();
+        renderInventoryTable();
+    }
+
+    function addRow(name = '', qty = 1, brand = '', imgUrl = defaultPlaceholder) {
+        const tbody = document.getElementById('tableBody');
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td class="row-index"></td>
+            <td>
+                <div class="item-cell">
+                    <img src="${imgUrl}" class="table-thumb">
+                    <input type="text" value="${name}" class="item-name" list="inventoryDatalist" placeholder="Type or select item..." onchange="handleInlineSelect(this)">
+                </div>
+            </td>
+            <td><input type="text" value="${qty}" class="item-qty"></td>
+            <td><input type="text" value="${brand}" class="item-brand" placeholder="Brand"></td>
+            <td class="no-print"><button class="btn-delete" onclick="removeRow(this)">X</button></td>
+        `;
+
+        tbody.appendChild(row);
+        updateIndexes();
+    }
+
+    function addNewRow() { addRow('', 1, '', defaultPlaceholder); }
+    function removeRow(btn) { btn.closest('tr').remove(); updateIndexes(); }
+
+    function updateIndexes() {
+        document.querySelectorAll('#tableBody tr').forEach((row, index) => {
+            row.querySelector('.row-index').textContent = index + 1;
+        });
+    }
+
+    refreshInventoryViews();
+    addNewRow();
+</script>
+
+</body>
+</html>
