@@ -1,0 +1,154 @@
+{
+  "db_version": 1,
+  "exported_at": "2026-09-06T14:32:18.014Z",
+  "shop": "SmarTech Solutions",
+  "items": [
+    {
+      "id": 101,
+      "name": "3 MD Metal Box",
+      "qty": 1,
+      "brand": "",
+      "img": "3 MD Metal Box.jpg"
+    },
+    {
+      "id": 102,
+      "name": "2 Masking Tap Paper",
+      "qty": 1,
+      "brand": "",
+      "img": "2 Masking Tap Paper.jpg"
+    },
+    {
+      "id": 103,
+      "name": "4 X 4 Co Box ( Hole )",
+      "qty": 1,
+      "brand": "",
+      "img": "4 X 4 Co Box   ( Hole ).jpg"
+    },
+    {
+      "id": 104,
+      "name": "Insulation Tap",
+      "qty": 1,
+      "brand": "",
+      "img": "Insulation Tap.jpg"
+    },
+    {
+      "id": 105,
+      "name": "4 X 4 Co Box ( Plain )",
+      "qty": 1,
+      "brand": "",
+      "img": "4 X 4 Co Box   ( Plain ).jpg"
+    },
+    {
+      "id": 106,
+      "name": "25 mm Electrical Conduit Pipe LMS (Black )",
+      "qty": 1,
+      "brand": "",
+      "img": "25 mm Electrical Conduit Pipe LMS  (Black ).jpg"
+    },
+    {
+      "id": 107,
+      "name": "3 X 3 Co Box with Adapter ( Plain )",
+      "qty": 1,
+      "brand": "",
+      "img": "3 X 3 Co Box with Adapter ( Plain ).jpg"
+    },
+    {
+      "id": 108,
+      "name": "20 mm Electrical Conduit Pipe LMS ( Black )",
+      "qty": 1,
+      "brand": "",
+      "img": "20 mm Electrical Conduit Pipe LMS  ( Black ).jpg"
+    },
+    {
+      "id": 109,
+      "name": "Adaptor 25 mm - 20 mm",
+      "qty": 1,
+      "brand": "",
+      "img": "Adaptor 25 mm - 20 mm.jpg"
+    },
+    {
+      "id": 110,
+      "name": "Adaptor 25 mm - 25 mm",
+      "qty": 1,
+      "brand": "",
+      "img": "Adaptor 25 mm - 25 mm.jpg"
+    },
+    {
+      "id": 111,
+      "name": "8 MD Metal Box",
+      "qty": 1,
+      "brand": "",
+      "img": "8 MD Metal Box.jpg"
+    },
+    {
+      "id": 112,
+      "name": "25 mm Electrical Conduit Pipe LMS ( Ivory )",
+      "qty": 1,
+      "brand": "",
+      "img": "25 mm Electrical Conduit Pipe LMS  ( Ivory ).png"
+    },
+    {
+      "id": 113,
+      "name": "2 MD Metal Box",
+      "qty": 1,
+      "brand": "",
+      "img": "2 MD Metal Box.jpg"
+    },
+    {
+      "id": 114,
+      "name": "4 MD Metal Box",
+      "qty": 1,
+      "brand": "",
+      "img": "4 MD Metal Box.jpg"
+    },
+    {
+      "id": 115,
+      "name": "32 mm Bent ISI",
+      "qty": 1,
+      "brand": "",
+      "img": "32 mm Bent ISI.jpg"
+    },
+    {
+      "id": 116,
+      "name": "32 mm Electrical Conduit Pipe",
+      "qty": 1,
+      "brand": "",
+      "img": "32 mm Electrical Conduit Pipe.jpg"
+    },
+    {
+      "id": 117,
+      "name": "20 mm Electrical Conduit Pipe LMS ( Ivory )",
+      "qty": 1,
+      "brand": "",
+      "img": "20 mm Electrical Conduit Pipe LMS  ( Ivory ).png"
+    },
+    {
+      "id": 118,
+      "name": "Concreet Nails 2_",
+      "qty": 1,
+      "brand": "",
+      "img": "Concreet Nails 2_.jpg"
+    },
+    {
+      "id": 119,
+      "name": "3 X 3 Co Box without Adapter ( Plain )",
+      "qty": 1,
+      "brand": "",
+      "img": "3 X 3 Co Box  without Adapter ( Plain ).jpg"
+    },
+    {
+      "id": 120,
+      "name": "Adaptor 20 mm - 20 mm",
+      "qty": 1,
+      "brand": "",
+      "img": "Adaptor 20 mm - 20 mm.jpg"
+    },
+    {
+      "id": 121,
+      "name": "6 MD Metal Box",
+      "qty": 1,
+      "brand": "",
+      "img": "6 MD Metal Box.jpg"
+    }
+  ]
+}
