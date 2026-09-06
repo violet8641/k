@@ -102,10 +102,10 @@
         th { background-color: var(--primary); color: white; font-size: 13px; }
         td input { width: 90%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; }
         
-        /* UPDATED: Increased image dimensions */
-        .table-thumb { width: 55px; height: 55px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
+        /* RESTORED: Image dimensions back to original 40px */
+        .table-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
         
-        /* UPDATED: Increased gap between image and text field */
+        /* KEPT: Increased gap between image and text field */
         .item-cell { display: flex; align-items: center; gap: 18px; }
 
         /* Inventory Manager Form */
@@ -119,7 +119,7 @@
             gap: 10px;
         }
         .inv-form-full { grid-column: span 4; display: flex; justify-content: flex-end; gap: 10px; align-items: center; }
-        .img-preview { width: 55px; height: 55px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
+        .img-preview { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
 
         /* Actions & Buttons */
         .actions { display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; }
@@ -166,11 +166,13 @@
 <body>
 
 <div class="container">
+    <!-- Top Navigation Tabs -->
     <div class="nav-tabs no-print">
         <button class="tab-btn active" onclick="switchTab('estimateTab', this)">Estimate Generator</button>
         <button class="tab-btn" onclick="switchTab('inventoryTab', this)">Inventory Manager</button>
     </div>
 
+    <!-- TAB 1: ESTIMATE GENERATOR -->
     <div id="estimateTab" class="tab-content active">
         <div class="shop-header">
             <div class="shop-info">
@@ -203,6 +205,7 @@
             </div>
         </div>
 
+        <!-- Dropdown Search Bar -->
         <div class="search-select-section no-print">
             <label for="itemSearchInput">🔍 Search & Add Item:</label>
             <input type="text" id="itemSearchInput" list="inventoryDatalist" placeholder="Type item name to add..." onchange="handleDropdownSelect(this)">
@@ -210,6 +213,7 @@
             <button class="btn btn-add" onclick="addNewRow()">+ Add Blank Line</button>
         </div>
 
+        <!-- Estimate Table (Includes BRAND Column) -->
         <table id="estimateTable">
             <thead>
                 <tr>
@@ -228,6 +232,7 @@
         </div>
     </div>
 
+    <!-- TAB 2: INVENTORY MANAGER -->
     <div id="inventoryTab" class="tab-content">
         <h2>Inventory Management</h2>
         
@@ -272,7 +277,7 @@
 </div>
 
 <script>
-    const defaultPlaceholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='55' height='55' viewBox='0 0 55 55'><rect width='55' height='55' fill='%233b82f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white'>Item</text></svg>";
+    const defaultPlaceholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' fill='%233b82f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Item</text></svg>";
 
     const defaultInventorySeed = [
         { id: 1, name: "20mm Conduit Pipe LMS", qty: 10, brand: "Polycab / Astral", img: defaultPlaceholder },
