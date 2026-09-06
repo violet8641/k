@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaji'S</title>
+    <title>Smartech</title>
     <style>
         :root {
             --primary: #1e293b;
@@ -13,14 +13,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #f1f5f9;
             margin: 0;
             padding: 20px;
             color: #334155;
         }
 
-        /* Full Width Web Application Display */
         .container {
             max-width: 950px;
             margin: 0 auto;
@@ -56,25 +55,27 @@
 
         /* Shop Header */
         .shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
         .shop-info h1 { margin: 0 0 5px 0; color: var(--primary); font-size: 24px; }
         .shop-info p { margin: 2px 0; font-size: 13px; color: #64748b; }
-        .estimate-title h2 { margin: 0; font-size: 28px; color: var(--accent); }
+        
+        .estimate-title {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .estimate-title h2 { margin: 0; font-size: 20px; color: var(--accent); }
 
         /* Customer Details Form */
         .details-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 15px;
             background: var(--light-bg);
-            padding: 15px;
+            padding: 10px;
             border-radius: 6px;
         }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
@@ -96,11 +97,11 @@
         .search-select-section input { flex-grow: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
 
         /* Tables */
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th, td { padding: 5px; text-align: left; border-bottom: 1px solid var(--border); }
         th { background-color: var(--primary); color: white; font-size: 13px; }
         td input { width: 90%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; }
-        .table-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+        .table-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
         .item-cell { display: flex; align-items: center; gap: 10px; }
 
         /* Inventory Manager Form */
@@ -114,7 +115,7 @@
             gap: 10px;
         }
         .inv-form-full { grid-column: span 4; display: flex; justify-content: flex-end; gap: 10px; align-items: center; }
-        .img-preview { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+        .img-preview { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
 
         /* Actions & Buttons */
         .actions { display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; }
@@ -125,83 +126,47 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #64748b; color: white; }
 
-        /* ----------------------------------------------------
-           TELEGRAM/MOBILE VIEW PDF EXPORT SETTINGS
-        ---------------------------------------------------- */
+        /* PDF Printing Styles & Header/Footer Removal */
         @page {
-            size: 105mm 160mm; /* Sized for standard mobile device screen proportions */
-            margin: 0;
+            margin: 0; /* Setting this to 0 removes browser headers/footers */
         }
 
-        @media print {
+     
+     @media print {
             body { 
-                background: #ffffff !important; 
-                padding: 0 !important; 
-                margin: 0 !important;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-                color: #1e293b !important;
+                background: none; 
+                padding: 10mm; 
             }
             .container { 
-                box-shadow: none !important; 
-                padding: 12px !important; 
-                width: 100% !important; 
-                max-width: 100% !important;
-                box-sizing: border-box !important;
+                box-shadow: none; 
+                padding: 20px; 
+                width: 100%; 
+                border: 2px solid var(--primary); 
+                border-radius: 0; 
+                box-sizing: border-box; 
+                /* Changed this line to perfectly fit one page */
+                min-height: calc(100vh - 25mm); 
             }
+            /* ... rest of your print CSS ... */
+     
+     
+     
+     
+            
+            
+            
+            
             .nav-tabs, .search-select-section, .no-print, .btn-delete { 
                 display: none !important; 
-            }
-            .shop-header {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                border-bottom: 2px solid #2563eb !important;
-                padding-bottom: 8px !important;
-                margin-bottom: 10px !important;
-            }
-            .shop-info h1 { font-size: 16px !important; color: #1e293b !important; margin: 0 0 2px 0 !important; }
-            .shop-info p { font-size: 10px !important; color: #64748b !important; margin: 1px 0 !important; }
-            .estimate-title { margin-top: 6px !important; }
-            .estimate-title h2 { font-size: 15px !important; color: #2563eb !important; margin: 0 !important; }
-            
-            .details-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 6px !important;
-                padding: 8px !important;
-                background: #f8fafc !important;
-                border: 1px solid #e2e8f0 !important;
-                border-radius: 6px !important;
-                margin-bottom: 10px !important;
-            }
-            .form-group label { font-size: 9px !important; color: #64748b !important; }
-            .form-group input { font-size: 11px !important; font-weight: bold !important; padding: 0 !important; }
-
-            table { width: 100% !important; margin-bottom: 0 !important; }
-            th { 
-                background: #1e293b !important; 
-                color: #ffffff !important; 
-                font-size: 10px !important; 
-                padding: 6px 4px !important; 
-            }
-            td { 
-                border-bottom: 1px solid #e2e8f0 !important; 
-                font-size: 11px !important; 
-                padding: 6px 4px !important; 
             }
             input { 
                 border: none !important; 
                 background: transparent !important; 
                 padding: 0 !important; 
-                font-size: 11px !important;
-                color: #1e293b !important;
             }
             .table-thumb {
-                width: 26px !important;
-                height: 26px !important;
-                border-radius: 4px !important;
+                object-fit: contain !important;
             }
-            .item-cell { gap: 6px !important; }
         }
     </style>
 </head>
@@ -222,9 +187,10 @@
                 <p>Electrical, Plumbing, CCTV, Solar & Automation</p>
                 <p>Trippanachi | Ph: +91 8590 48 48 48</p>
             </div>
-            <div class="estimate-title">
-                <h2>ESTIMATE</h2>
-            </div>
+        </div>
+
+        <div class="estimate-title">
+            <h2>ESTIMATE</h2>
         </div>
 
         <div class="details-grid">
@@ -254,11 +220,11 @@
             <button class="btn btn-add" onclick="addNewRow()">+ Add Blank Line</button>
         </div>
 
-        <!-- Estimate Table -->
+        <!-- Estimate Table (Includes BRAND Column) -->
         <table id="estimateTable">
             <thead>
                 <tr>
-                    <th style="width: 8%;">#</th>
+                    <th style="width: 8%;">SL NO</th>
                     <th style="width: 47%;">ITEM DESCRIPTION</th>
                     <th style="width: 15%;">QTY</th>
                     <th style="width: 20%;">BRAND</th>
@@ -318,8 +284,10 @@
 </div>
 
 <script>
+    // Self-Contained Vector SVG Fallback Image
     const defaultPlaceholder = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' fill='%233b82f6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Item</text></svg>";
 
+    // Initial Inventory Seed
     const defaultInventorySeed = [
         { id: 1, name: "20mm Conduit Pipe LMS", qty: 10, brand: "Polycab / Astral", img: defaultPlaceholder },
         { id: 2, name: "3x3 Co Box with Adapter", qty: 5, brand: "Cawin", img: defaultPlaceholder },
@@ -327,6 +295,7 @@
         { id: 4, name: "Insulation Tape Roll", qty: 6, brand: "E Fab", img: defaultPlaceholder }
     ];
 
+    // Load Permanent Data from LocalStorage
     let inventory = JSON.parse(localStorage.getItem('app_inventory')) || defaultInventorySeed;
     let currentBase64Image = defaultPlaceholder;
 
@@ -370,8 +339,32 @@
     function handleDropdownSelect(input) {
         const val = input.value;
         const selectedItem = inventory.find(item => item.name.toLowerCase() === val.toLowerCase());
+        
         if (selectedItem) {
-            addRow(selectedItem.name, selectedItem.qty, selectedItem.brand, selectedItem.img);
+            // 1. Check if the item already exists in the table
+            const existingRows = document.querySelectorAll('#tableBody tr');
+            let itemExists = false;
+            
+            for (let row of existingRows) {
+                const nameInput = row.querySelector('.item-name');
+                if (nameInput && nameInput.value.toLowerCase() === selectedItem.name.toLowerCase()) {
+                    // 2. If it exists, update the quantity
+                    const qtyInput = row.querySelector('.item-qty');
+                    const currentQty = parseInt(qtyInput.value) || 0;
+                    const defaultQty = parseInt(selectedItem.qty) || 1;
+                    qtyInput.value = currentQty + defaultQty;
+                    
+                    itemExists = true;
+                    break; 
+                }
+            }
+            
+            // 3. If it doesn't exist, add a new row
+            if (!itemExists) {
+                addRow(selectedItem.name, selectedItem.qty, selectedItem.brand, selectedItem.img);
+            }
+            
+            // Clear the search bar
             input.value = '';
         }
     }
@@ -379,6 +372,7 @@
     function handleInlineSelect(input) {
         const val = input.value;
         const selectedItem = inventory.find(item => item.name.toLowerCase() === val.toLowerCase());
+        
         if (selectedItem) {
             const row = input.closest('tr');
             row.querySelector('.table-thumb').src = selectedItem.img;
@@ -422,9 +416,17 @@
             item.name = name;
             item.qty = qty;
             item.brand = brand;
-            if (currentBase64Image !== defaultPlaceholder) item.img = currentBase64Image;
+            if (currentBase64Image !== defaultPlaceholder) {
+                item.img = currentBase64Image;
+            }
         } else {
-            inventory.push({ id: Date.now(), name, qty, brand, img: currentBase64Image });
+            inventory.push({
+                id: Date.now(),
+                name: name,
+                qty: qty,
+                brand: brand,
+                img: currentBase64Image
+            });
         }
 
         saveToLocalStorage();
@@ -440,8 +442,8 @@
         document.getElementById('invName').value = item.name;
         document.getElementById('invQty').value = item.qty;
         document.getElementById('invBrand').value = item.brand || '';
-        currentBase64Image = item.img;
         
+        currentBase64Image = item.img;
         const imgPreview = document.getElementById('imagePreview');
         imgPreview.src = item.img;
         imgPreview.style.display = 'block';
@@ -494,8 +496,14 @@
         updateIndexes();
     }
 
-    function addNewRow() { addRow('', 1, '', defaultPlaceholder); }
-    function removeRow(btn) { btn.closest('tr').remove(); updateIndexes(); }
+    function addNewRow() {
+        addRow('', 1, '', defaultPlaceholder);
+    }
+
+    function removeRow(btn) {
+        btn.closest('tr').remove();
+        updateIndexes();
+    }
 
     function updateIndexes() {
         document.querySelectorAll('#tableBody tr').forEach((row, index) => {
@@ -503,6 +511,7 @@
         });
     }
 
+    // Initial Load
     refreshInventoryViews();
     addNewRow();
 </script>
