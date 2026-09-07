@@ -102,10 +102,10 @@
         th { background-color: var(--primary); color: white; font-size: 13px; }
         td input { width: 90%; padding: 6px; border: 1px solid var(--border); border-radius: 4px; }
         
-        /* RESTORED: Image dimensions back to original 40px */
+        /* Image dimensions */
         .table-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; border: 1px solid var(--border); background-color: #fff; }
         
-        /* KEPT: Increased gap between image and text field */
+        /* Gap between image and text field */
         .item-cell { display: flex; align-items: center; gap: 18px; }
 
         /* Inventory Manager Form */
@@ -130,25 +130,53 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #64748b; color: white; }
 
+        /* Hide repeating border from screen view */
+        .print-border {
+            display: none;
+        }
+
         /* PDF Printing Styles & Header/Footer Removal */
         @page {
-            margin: 0;
+            margin: 8mm;
         }
 
         @media print {
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: auto; /* Fixes multi-page clipping */
+            }
+            
             body { 
                 background: none; 
-                padding: 10mm; 
             }
+
+            /* Creates a fixed border that repeats on every printed page */
+            .print-border {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 2px solid var(--primary);
+                box-sizing: border-box;
+                pointer-events: none;
+                z-index: 1000;
+            }
+
             .container { 
                 box-shadow: none; 
-                padding: 20px; 
+                border: none;
+                border-radius: 0;
+                padding: 10mm !important; /* Moves content inside the fixed border */
                 width: 100%; 
-                border: 2px solid var(--primary); 
-                border-radius: 0; 
+                max-width: 100%;
+                height: auto;
+                overflow: visible;
                 box-sizing: border-box; 
-                min-height: calc(100vh - 25mm); 
             }
+
             .nav-tabs, .search-select-section, .no-print, .btn-delete { 
                 display: none !important; 
             }
@@ -157,13 +185,24 @@
                 background: transparent !important; 
                 padding: 0 !important; 
             }
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                display: none !important;
+            }
             .table-thumb {
                 object-fit: contain !important;
             }
+
+            /* Improve table pagination */
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            thead { display: table-header-group; }
         }
     </style>
 </head>
 <body>
+
+<!-- Hidden on screen, provides full-page border loop in print -->
+<div class="print-border"></div>
 
 <div class="container">
     <!-- Top Navigation Tabs -->
@@ -248,7 +287,7 @@
             </div>
             <div class="form-group">
                 <label>Brand</label>
-                <input type="text" id="invBrand" placeholder="Brand Name">
+                <input type="text" id="invBrand">
             </div>
             <div class="form-group">
                 <label>Upload Item Image</label>
@@ -474,7 +513,7 @@
                 </div>
             </td>
             <td><input type="text" value="${qty}" class="item-qty"></td>
-            <td><input type="text" value="${brand}" class="item-brand" placeholder="Brand"></td>
+            <td><input type="text" value="${brand}" class="item-brand"></td>
             <td class="no-print"><button class="btn-delete" onclick="removeRow(this)">X</button></td>
         `;
 
